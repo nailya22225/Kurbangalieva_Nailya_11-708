@@ -4,25 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ex_4_3_
+namespace lilili3
 {
     class Program
     {
+        static int f(int x, int n)
+        {
+            return (n - 1) / x;
+        }
         static void Main(string[] args)
         {
+            Console.Write("a = ");
             int a = Convert.ToInt32(Console.ReadLine());
-            if (a < 12)
-            {
-                a = a * 30;
-            }
-            else {if (a - 12 < 6)
-                {
-                    a = (a - 12) * 30;
-                }
-                else { a = 360 - (a - 12) * 30;
-                }
-            }
-            Console.WriteLine(a);
+            Console.Write("b = ");
+            int b = Convert.ToInt32(Console.ReadLine());
+            int n = b - a;
+            Console.WriteLine(f(4, n) + f(100, n) - f(400, n));
+            Console.ReadLine();
+
         }
     }
 }
