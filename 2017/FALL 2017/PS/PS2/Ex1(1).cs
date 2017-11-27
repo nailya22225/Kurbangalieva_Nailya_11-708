@@ -9,16 +9,19 @@ namespace ps2_1
     class Program
     {
         static int k;
+        //метод вычисляет факториал
         static long Factorial(int n)
         {
             if (n == 0 || n == 1) return 1;
             return n * Factorial(n - 1);
         }
+        //сама функция
         static double Function(double x, int k)
         {
             return Math.Pow(x,2*k)/Factorial(2*k);
             
         }
+        //считает сумму
         static double Summa (double x, double e)
         {
             double previous = 0;

@@ -8,11 +8,13 @@ namespace Ps2_3
 {
     class Program
     {
+        // функция для суммы
         static double Function(double x, int k)
         {
             return Math.Pow(-1, k) / (Math.Pow(x, 2*k+1)*2*k+1);
 
         }
+        //считает сумму
         static double Summa(double x, double e)
         {
             double previous = 0;
@@ -29,6 +31,7 @@ namespace Ps2_3
             Console.WriteLine("Точность достигается на " + k + " шагу");
             return sum;
         }
+        //считает все что было в формуле
         static double Result(double x, double e)
         {
             return Math.PI * Math.Abs(x) / 2 * x - Summa(x, e);
