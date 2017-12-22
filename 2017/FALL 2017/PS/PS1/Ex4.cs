@@ -19,6 +19,7 @@ namespace semestr14
             {
                 i = Convert.ToInt32(Console.ReadLine());
                 if (i == 0) break;
+		// а сбрасывать счётчик вы не хотите?
                 if (i > max) max = i;
                 else if (i==max) k++;
             }
