@@ -80,6 +80,7 @@ namespace ps2_5
             Random random = new Random();
             for (int i = 0; i < n; i++)
             {
+				// ---check--- зачем константы в код зашиваете? надо на уровень свойств выносить
                 double x1 = Random(0.5, 2.5,random );
                 double y1 = Random(0, 0.48, random);
                 if (y1 <= Function(x1)) koll++;

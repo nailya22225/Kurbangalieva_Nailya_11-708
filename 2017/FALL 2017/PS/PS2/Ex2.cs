@@ -31,7 +31,7 @@ namespace ps2_4
             while (Math.Abs(current - previous) > e)
             {
                 previous = current;
-                
+                // ---check--- всё то же самое, неоптимально
                 current = Function(k);
                 sum += current;
                 k++;
