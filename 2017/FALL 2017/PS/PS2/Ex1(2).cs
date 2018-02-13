@@ -31,6 +31,7 @@ namespace ps2_2
             while (Math.Abs(current - previous) > e)
             {
                 previous = current;
+				// ---check--- неоптимальное решение перевычислять на каждом шаге полностью факториалы.
                 current = Function(x, k);
                 sum += current;
                 k++;

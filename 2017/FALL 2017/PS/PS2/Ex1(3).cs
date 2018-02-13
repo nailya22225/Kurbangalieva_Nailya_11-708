@@ -24,6 +24,7 @@ namespace Ps2_3
             while (Math.Abs(current - previous) > e)
             {
                 previous = current;
+				// ---check--- неоптимальное решение перевычислять на каждом шаге полностью степени, надо было домножать на каждом шаге
                 current = Function(x, k);
                 sum += current;
                 k++;
