@@ -12,27 +12,48 @@ namespace graf
         {
             Console.WriteLine("Введите колличество вершин");
             int N = Convert.ToInt32(Console.ReadLine());
-            int[] array = new int[N];
+            int[] array = new int[N];//массив который хранит ссылки на корень/предыдущий элемент
+            int[] size = new int[N];//массив который хранит число вершин, состоящих в дереве
             for (int i = 0; i < N; i++)
             {
                 array[i] = i;
+                size[i] = 1;
             }
             while (true)
             {
                 Console.WriteLine("Введите два числа");
                 int x = Convert.ToInt32(Console.ReadLine());
                 int y = Convert.ToInt32(Console.ReadLine());
-                if (array[x] == array[y])
+                int x1 = x;
+                int y1 = y;
+                while (x1 != array[x1])//если вершина x не является корнем
                 {
-                    Console.WriteLine("Такой путь уже есть");
-                    continue;
+                    array[x1] = array[array[x1]];//меняем ее ссылку
+                    //теперь она укзывает на предпредыдущий элемент
+                    x1 = array[x1];//ищет корень
                 }
-                for (int j = 0; j < N; j++)
+                while (y1 != array[y1])//аналогично с вершиной y
                 {
-                    if (array[j] == array[x])
-                        array[y] = array[x];
+                    array[y1] = array[array[y1]];
+                    y1 = array[y1];
                 }
-                Console.WriteLine(x + " " + "-" + " " + y);
+                if (x1 != y1)//если у двух вершин разные корни, они не связны, выводим пару
+                {
+                    Console.WriteLine(x + " " + "-" + " " + y);
+                    //сравниваем деревья, чтобы к большему присоеденить меньшее
+                    if (size[x1] < size[y1])//если дерево с вершиной x меньше,
+                    { 
+                        array[x1] = y1;//тогда корень этого дерева ссылается на корень большего дерева
+                        size[y1] += size[x1];//размер дерева увеличивается
+                    }
+                    else
+                    {//если дерево с вершиной x больше или равно дерева с вершиной у,
+                        array[y1] = x1;//то корень дерева с вершиной у
+                        //ссылается на корень дерева с вершиной х
+                        size[x1] += size[y1];//размер так же увеличивается
+                    }
+                }
+                else Console.WriteLine("Такой путь уже есть");
             }
         }
     }
