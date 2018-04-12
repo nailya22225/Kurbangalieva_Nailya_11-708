@@ -1,0 +1,111 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApp29
+{
+    public static class Helpers
+    {
+        public static T Create<T>(string str)
+            where T : new()
+        {
+            var result = new T();
+
+            var data = str.Split(' ');
+            var properties = typeof(T).GetProperties();
+            for (int i = 0; i < properties.Length; i++)
+            {
+                properties[i].SetValue(result, Convert.ChangeType(data[i], properties[i].PropertyType), null);
+            }
+
+            return result;
+        }
+
+        public static IEnumerable<T> ReadItems<T>(string filename)
+            where T : new()
+        {
+            return File
+                .ReadAllLines(filename)
+                .Select(Create<T>).ToList();
+        }
+    }
+    public class С
+    {
+        public int CustomerId { get; set; }
+        public string Shop { get; set; }
+        public int DiscountPercent { get; set; }
+    }
+
+    public class D
+    {
+        public string ItemArticle { get; set; }
+        public string ShopName { get; set; }
+        public double Price { get; set; }
+    }
+
+    public class E
+    {
+        public int CustomerId { get; set; }
+        public string ShopName { get; set; }
+        public string ItemArticle { get; set; }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            LinqObj();
+        }
+
+
+         
+         static void LinqObj()
+    {
+        var prices = Helpers.ReadItems<D>("D.txt");
+        var discount = Helpers.ReadItems<С>("C.txt");
+        var orders = Helpers.ReadItems<E>("E.txt");
+
+        var r = prices
+                //объединяем 
+            .Join(orders, x => new { x.ItemArticle, x.ShopName }, x => new { x.ItemArticle, x.ShopName }, (x, y) => new { y.ShopName, x.ItemArticle, x.Price, y.CustomerId })
+            .Join(discount, x => new { x.ShopName, x.CustomerId }, x => new { ShopName = x.Shop, x.CustomerId }, (a, z) => new { a.ItemArticle, a.ShopName, z.DiscountPercent })
+            .GroupBy(x => new { x.ShopName, x.ItemArticle })
+            .Select(x => new { x.Key.ShopName, x.Key.ItemArticle, Discount = x.Count(), /*тут должна быть сумма*/ });
+
+        var result =
+            from p in prices
+            join o in orders
+            on new { p.ItemArticle, p.ShopName } equals new { o.ItemArticle, o.ShopName }
+            select new { o.ItemArticle, o.ShopName, o.CustomerId, p.Price }
+            into sg
+            join d in discount
+            on new { sg.CustomerId, sg.ShopName } equals new { d.CustomerId, ShopName = d.Shop }
+            into ds
+            from d in ds.DefaultIfEmpty(new С())
+            select new { sg.ItemArticle, sg.ShopName, d.DiscountPercent }
+            into tmp
+            group tmp by new { tmp.ItemArticle, tmp.ShopName }
+            into g
+            orderby g.Key.ShopName, g.Key.ItemArticle
+            select new { g.Key.ShopName, g.Key.ItemArticle, Discount = g.Count(), /*тут должна быть сумма*/};
+
+        //4. Даны последовательности C, D и E, включающие следующие поля:
+        // C: < Скидка(в процентах) > < Название магазина > < Код потребителя >
+        //    D: < Артикул товара > < Название магазина > < Цена(в рублях) >
+        //       E: < Артикул товара > < Название магазина > < Код потребителя >
+        //           Свойства последовательностей описаны в преамбуле. Для каждого магазина и 
+        //каждого товара определить количество покупок этого товара со скидкой в данном магазине и
+        //суммарную стоимость этих покупок с учетом скидки(вначале выводится название магазина, затем 
+        //артикул товара, затем количество покупок со скидкой и их суммарная стоимость). При вычислении размера
+        //скидки на товар копейки отбрасываются. Если для некоторой пары «магазин–товар» не найдено ни одной покупки 
+        //со скидкой, то информация о данной паре не выводится.Если не найдено ни одной подходящей пары «магазин–товар»,
+        //то записать в результирующий файл текст «Требуемые данные не найдены». Сведения о каждой паре «магазин–товар» 
+        //выводить на новой строке и упорядочивать по названиям магазинов в алфавитном порядке, а для одинаковых названий
+        //— по артикулам товаров(также в алфавитном порядке).
+
+    }
+}
+}
