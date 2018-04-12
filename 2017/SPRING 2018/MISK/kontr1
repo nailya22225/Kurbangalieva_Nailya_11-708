@@ -1,0 +1,30 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace kontrlinq22
+{
+    class Program
+    {
+        public static IEnumerable<TResult> CartesianProduct<TOuter, TInner, TResult>(this IEnumerable<TOuter> seq, IEnumerable<TInner> others, Func<TOuter, TInner, TResult> selector)
+        {
+            return from x in seq
+                   from u in others
+                   select selector(x, u);
+            /*foreach (var item1 in seq)
+                foreach (var item2 in others)
+                    yield return selector(item1, item2);*/
+        }
+
+        static void Main(string[] args)
+        {
+            //1. Реализовать метод расширения осуществляющий декартово произведение
+            //двух последовательностей (четных элементов из первой последовательности 
+            //и нечетных из второй). Метод должен быть обобщенным. Типы элементов соединяемых 
+            //последовательностей могут отличаться. Должна быть предусмотрена возможность указания 
+            //способа формирования элементов итоговой последовательности с помощью делегата (selector)
+        }
+    }
+}
