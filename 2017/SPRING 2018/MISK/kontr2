@@ -1,0 +1,49 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace kontrlinq
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //5. Даны строковые последовательности A и B, все строки в каждой 
+            //из них состоят только из цифр и заглавных букв латинского алфавита и 
+            //имеют ненулевую длину. Сформировать последовательностей строк вида «a.b», 
+            //где а – строка из А, b – либо строка из B с таким же количеством букв или таким же
+            //количеством цифр, но меньшим числом букв, что и в строке a, либо строка из одного символа 
+            //“!”. Расположить элементы получившейся последовательности в лексикографическом порядке по убыванию.
+            IEnumerable<string> a
+               = new[] { "AA", "B21", "A32", "VS", "S", "AAA" };
+            IEnumerable<string> b
+                = new[] { "B2", "BSS3", "AD6", "SSS" };
+            /*
+             var result =
+              a.GroupJoin(b, x => x.Count(), x => x.Count(),
+                  (x, y) => y.DefaultIfEmpty("!")
+                             .Select(z => x + "." + z))
+                  .SelectMany(x => x)
+                  .OrderBy(x => x);
+          foreach (var e in result)
+          {
+              Console.WriteLine(e);
+          }
+            */
+           var result =
+               from x in a //элементы из а
+               join y in b //элементы из b
+                   on x.Count() equals y.Count() //если длина элемментов совпадает
+                   into yy //если нет пары то 0
+               from z in yy.DefaultIfEmpty("!") //меняем 0 на !
+               orderby x, z //лексикографический порядок
+               select x + "." + z; //точка
+           Console.WriteLine(string.Join(" ", result));
+           
+        }
+
+
+    }
+}
